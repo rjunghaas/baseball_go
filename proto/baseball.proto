@@ -1,0 +1,19 @@
+// Generate baseball.pb.go with protoc -I baseball/ baseball/baseball.proto --go_out=plugins=grpc:baseball
+
+syntax = "proto3";
+
+package baseball;
+
+service Vorp {
+  rpc GetVorp(PlayerId) returns (PlayerVorp) {}
+}
+
+message PlayerId {
+  int32 id = 1;
+  string startDate = 2;
+  string endDate = 3;
+}
+
+message PlayerVorp {
+  float vorp = 1;
+}

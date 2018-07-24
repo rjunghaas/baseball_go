@@ -1,0 +1,17 @@
+# Use "docker-machine ip" to get IP Address of container
+FROM golang
+
+WORKDIR src/
+
+ADD vorpAPI.go baseball/api.go
+ADD github.com/go-sql-driver/mysql github.com/go-sql-driver/mysql
+ADD golang.org/x golang.org/x
+ADD google.golang.org google.golang.org
+ADD proto/baseball.pb.go baseball/proto/baseball.pb.go
+ADD github.com/golang github.com/golang
+
+ENV GOBIN $GOPATH/bin
+RUN go install baseball/api.go
+ENTRYPOINT ["/go/bin/api"]
+
+EXPOSE 3308

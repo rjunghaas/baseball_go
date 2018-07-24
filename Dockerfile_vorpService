@@ -1,0 +1,18 @@
+FROM golang
+
+WORKDIR src/
+
+ADD vorpService.go baseball/vorpService.go
+ADD github.com/PuerkitoBio/goquery github.com/PuerkitoBio/goquery
+ADD github.com/andybalholm github.com/andybalholm
+ADD github.com/djimenez/iconv-go github.com/djimenez/iconv-go
+ADD golang.org/x golang.org/x
+ADD /proto/baseball.pb.go baseball/proto/baseball.pb.go
+ADD github.com/golang github.com/golang
+ADD google.golang.org google.golang.org
+
+ENV GOBIN $GOPATH/bin
+RUN go install baseball/vorpService.go
+ENTRYPOINT ["/go/bin/vorpService"]
+
+EXPOSE 10000
