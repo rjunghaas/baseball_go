@@ -46,7 +46,7 @@ func GetPlayerId(name string) int {
   return res.id
 }
 
-func GetPlayerName(name string) string {
+func GetPlayerName(name string, c chan string) {
   var res Player
   queryStringHead := "SELECT name FROM baseball.player where name LIKE "
 
@@ -73,7 +73,7 @@ func GetPlayerName(name string) string {
 
   // Set currPlayer's name
   currPlayer.name = res.name
-  return res.name
+  c <- res.name
 }
 
 func RespondWithSearchJSON(w http.ResponseWriter, code int, payload string){
@@ -106,11 +106,12 @@ func RespondWithScrapeJSON(w http.ResponseWriter, code int, vorp float32){
 
 func SearchHandler(w http.ResponseWriter, r *http.Request) {
   // Parse user input from URL and search for match in database
+  c := make (chan string)
   nameString := r.URL.Path[8:]
-  name := GetPlayerName(nameString)
-  currPlayer.name = name
+  go GetPlayerName(nameString, c)
+  currPlayer.name = <-c
 
-  RespondWithSearchJSON(w, http.StatusOK, name)
+  RespondWithSearchJSON(w, http.StatusOK, currPlayer.name)
 }
 
 func CalcVorpHandlerWrapper(w http.ResponseWriter, r *http.Request, client pb.VorpClient) {
